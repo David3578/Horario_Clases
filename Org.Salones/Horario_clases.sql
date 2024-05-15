@@ -18,10 +18,10 @@ CREATE SCHEMA IF NOT EXISTS `Horario_clases` DEFAULT CHARACTER SET utf8mb3 ;
 USE `Horario_clases` ;
 
 -- -----------------------------------------------------
--- Table `Horario_clases`.`Aula`
+-- Table `Horario_clases`.`Aulas`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Horario_clases`.`Aula` (
-  `IdAula` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `Horario_clases`.`Aulas` (
+  `IdAula` INT NOT NULL,
   `Anicio` INT NULL DEFAULT NULL,
   `CantidadComputadoras` INT NULL DEFAULT NULL,
   `Ubicacion` VARCHAR(45) NULL DEFAULT NULL,
@@ -37,7 +37,7 @@ DEFAULT CHARACTER SET = utf8mb3;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Horario_clases`.`Profesor` (
   `idProfesor` INT NOT NULL,
-  `NombreProfesor` VARCHAR(45) NULL DEFAULT NULL,
+  `Nombre` VARCHAR(45) NULL DEFAULT NULL,
   `Especialidad` VARCHAR(45) NULL DEFAULT NULL,
   `Email` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`idProfesor`))
@@ -50,10 +50,10 @@ DEFAULT CHARACTER SET = utf8mb3;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Horario_clases`.`Turno` (
   `idTurno` INT NOT NULL,
-  `Año` DATE NULL,
-  `NombreTurno` VARCHAR(45) NULL,
+  `Nombre` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`idTurno`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
@@ -61,13 +61,13 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Horario_clases`.`Curso` (
   `idCurso` INT NOT NULL,
-  `NombreCurso` VARCHAR(45) NULL DEFAULT NULL,
-  `DescripcionCurso` TEXT NULL DEFAULT NULL,
+  `Nombre` VARCHAR(45) NULL DEFAULT NULL,
+  `Descripcion` TEXT NULL DEFAULT NULL,
   `Profesores_idProfesores` INT NULL DEFAULT NULL,
-  `Anio` INT NULL DEFAULT NULL,
+  `Año` DATE NULL DEFAULT NULL,
   `Division` INT NULL DEFAULT NULL,
   `Turno_idTurno` INT NOT NULL,
-  PRIMARY KEY (`idCurso`, `Turno_idTurno`),
+  PRIMARY KEY (`idCurso`),
   INDEX `Profesores_idProfesores` (`Profesores_idProfesores` ASC) VISIBLE,
   INDEX `fk_Curso_Turno1_idx` (`Turno_idTurno` ASC) VISIBLE,
   CONSTRAINT `Curso_ibfk_1`
@@ -87,9 +87,9 @@ DEFAULT CHARACTER SET = utf8mb3;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Horario_clases`.`Materia` (
   `idMateria` INT NOT NULL,
-  `NombreMateria` VARCHAR(45) NULL DEFAULT NULL,
-  `DescripcionMateria` TEXT NULL DEFAULT NULL,
-  `Anio` INT NULL DEFAULT NULL,
+  `Nombre` VARCHAR(45) NULL DEFAULT NULL,
+  `Descripcion` TEXT NULL DEFAULT NULL,
+  `Año` DATE NULL DEFAULT NULL,
   `Division` INT NULL DEFAULT NULL,
   PRIMARY KEY (`idMateria`))
 ENGINE = InnoDB
@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `Horario_clases`.`Horario` (
   INDEX `Materia_idMateria` (`Materia_idMateria` ASC) VISIBLE,
   CONSTRAINT `Horario_ibfk_1`
     FOREIGN KEY (`Aulas_IdAula`)
-    REFERENCES `Horario_clases`.`Aula` (`IdAula`),
+    REFERENCES `Horario_clases`.`Aulas` (`IdAula`),
   CONSTRAINT `Horario_ibfk_2`
     FOREIGN KEY (`Curso_idCurso`)
     REFERENCES `Horario_clases`.`Curso` (`idCurso`),
@@ -140,17 +140,6 @@ CREATE TABLE IF NOT EXISTS `Horario_clases`.`Materia_has_Profesores` (
     REFERENCES `Horario_clases`.`Profesor` (`idProfesor`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb3;
-
-
--- -----------------------------------------------------
--- Table `Horario_clases`.`Turno`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Horario_clases`.`Turno` (
-  `idTurno` INT NOT NULL,
-  `Año` DATE NULL,
-  `NombreTurno` VARCHAR(45) NULL,
-  PRIMARY KEY (`idTurno`))
-ENGINE = InnoDB;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
